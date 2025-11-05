@@ -1,48 +1,54 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Loja Bagunçada</title>
-<link rel="stylesheet" href="js/app.css">
-<link rel="stylesheet" href="css/reset.css">
-</head>
-<body>
-<header>
-<img src="assets/logo.png" id="logo">
-<nav>
-<ul>
-<li><a href="index.html">Início</a></li>
-<li><a href="contato.html">Contato</a></li>
-</ul>
-</nav>
-</header>
-<main>
-<section id="produtos">
-<h1>Produtos</h1>
-<div class="card" data-id="1">
-<h2 class="title">Mesa</h2>
-<p class="price">R$ 1200</p>
-<button onclick="editar(1)">Editar</button>
-<button onclick="excluir(1)">Excluir</button>
-</div>
-<div class="card" data-id="2">
-<h2 class="title">Cadeira</h2>
-<p class="price">R$ 300</p>
-<button onclick="editar(2)">Editar</button>
-<button onclick="excluir(2)">Excluir</button>
-</div>
-</section>
-<aside>
-<form id="novo" method="post">
-<label>Nome<input type="text" name="nome"></label>
-<label>Preço<input type="text" name="preco"></label>
-<button type="submit">Salvar</button>
-</form>
-</aside>
-<footer>
-<p>© Loja Bagunçada</p>
-</footer>
-<script src="css/main.js"></script>
-<script src="js/style.css"></script>
-</body>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-t" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loja Bagunçada - Início</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <img src="assets/logo.png" id="logo" alt="Logo Loja Bagunçada" />
+        <nav>
+          <ul>
+            <li><a href="index.html" class="active">Início</a></li>
+            <li><a href="contato.html">Contato</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="coluna">
+        <h1>Produtos</h1>
+        <div id="lista-produtos"></div>
+      </section>
+
+      <section class="coluna">
+        <h1>Formulário</h1>
+        <form id="form-produto" method="post">
+          <input type="hidden" id="produto-id" name="id" />
+
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome" required />
+
+          <label for="preco">Preço (R$):</label>
+          <input type="number" id="preco" name="preco" step="0.01" required />
+
+          <button type="submit">Salvar</button>
+          <button type="reset" id="btn-cancelar" class="hidden">
+            Cancelar Edição
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>© Loja Bagunçada</p>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+  </body>
 </html>

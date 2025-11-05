@@ -1,20 +1,47 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Contato</title>
-<link rel="stylesheet" href="css/reset.css">
-<link rel="stylesheet" href="js/style.css">
-</head>
-<body>
-<h1>Fale Conosco</h1>
-<form id="fale" action="">
-<input type="text" name="nome" id="nome">
-<input type="email" name="email" id="email">
-<textarea name="mensagem" id="mensagem"></textarea>
-<button onclick="enviarContato()">Enviar</button>
-</form>
-<script src="js/utils.js"></script>
-<script src="js/app.css"></script>
-</body>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loja Bagunçada - Contato</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <img src="assets/logo.png" id="logo" alt="Logo Loja Bagunçada" />
+        <nav>
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="contato.html" class="active">Contato</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container container-contato">
+      <section>
+        <h1>Fale Conosco</h1>
+        <form id="form-contato" action="">
+          <label for="nome">Nome:</label>
+          <input type="text" name="nome" id="nome" required />
+
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email" required />
+
+          <label for="mensagem">Mensagem:</label>
+          <textarea name="mensagem" id="mensagem" rows="5" required></textarea>
+
+          <button type="submit">Enviar</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>© Loja Bagunçada</p>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+  </body>
 </html>

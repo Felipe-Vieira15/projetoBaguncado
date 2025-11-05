@@ -1,0 +1,164 @@
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px 0;
+  border-bottom: 3px solid #55aaff;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#logo {
+  max-height: 40px; /* Apenas para o caso de o logo ser grande */
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 5px;
+}
+
+nav a.active,
+nav a:hover {
+  border-bottom: 2px solid #55aaff;
+}
+
+main {
+  display: flex;
+  gap: 30px;
+  padding-top: 20px;
+  flex-wrap: wrap;
+}
+
+.coluna {
+  flex: 1;
+  min-width: 300px;
+}
+
+.container-contato {
+  max-width: 600px;
+  display: block;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+form {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="email"],
+form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  background: #55aaff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #3388dd;
+}
+
+button[type="reset"] {
+  background: #aaa;
+}
+button[type="reset"]:hover {
+  background: #888;
+}
+
+.hidden {
+  display: none;
+}
+
+.card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card .title {
+  font-size: 18px;
+  font-weight: bold;
+  flex: 2;
+}
+
+.card .price {
+  color: green;
+  font-size: 16px;
+  flex: 1;
+}
+
+.card .botoes {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.mensagem-lista {
+  padding: 20px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #555;
+  font-style: italic;
+}
+
+.mensagem-lista.erro {
+  color: #b90000;
+  font-weight: bold;
+  font-style: normal;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  background: #333;
+  color: #fff;
+}
