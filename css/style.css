@@ -1,3 +1,13 @@
+html, body {
+  height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 header {
   background-color: #333;
   color: #fff;
@@ -12,7 +22,7 @@ header .container {
 }
 
 #logo {
-  max-height: 40px; /* Apenas para o caso de o logo ser grande */
+  max-height: 60px;
 }
 
 nav ul {
@@ -38,6 +48,7 @@ main {
   gap: 30px;
   padding-top: 20px;
   flex-wrap: wrap;
+  flex-grow: 1;
 }
 
 .coluna {
