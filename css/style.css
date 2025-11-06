@@ -1,11 +1,14 @@
 html, body {
   height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f8f9fa;
 }
 
 header {
@@ -13,6 +16,9 @@ header {
   color: #fff;
   padding: 20px 0;
   border-bottom: 3px solid #55aaff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
 }
 
 header .container {
@@ -36,10 +42,12 @@ nav a {
   text-decoration: none;
   font-size: 18px;
   padding: 5px;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
 nav a.active,
 nav a:hover {
+  color: #55aaff;
   border-bottom: 2px solid #55aaff;
 }
 
@@ -49,6 +57,18 @@ main {
   padding-top: 20px;
   flex-wrap: wrap;
   flex-grow: 1;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .coluna {
@@ -72,7 +92,8 @@ form {
   background: #fff;
   border: 1px solid #ccc;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 form label {
@@ -86,11 +107,22 @@ form input[type="number"],
 form input[type="email"],
 form textarea {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
+
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form input[type="email"]:focus,
+form textarea:focus {
+  border-color: #55aaff;
+  box-shadow: 0 0 5px rgba(85,170,255,0.5);
+  outline: none;
+}
+
 
 button {
   background: #55aaff;
@@ -100,11 +132,13 @@ button {
   cursor: pointer;
   border-radius: 4px;
   font-size: 16px;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
 }
 
 button:hover {
   background: #3388dd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 button[type="reset"] {
@@ -112,6 +146,8 @@ button[type="reset"] {
 }
 button[type="reset"]:hover {
   background: #888;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .hidden {
@@ -123,12 +159,19 @@ button[type="reset"]:hover {
   padding: 15px;
   margin-bottom: 10px;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .card .title {
@@ -148,6 +191,19 @@ button[type="reset"]:hover {
   display: flex;
   gap: 10px;
   justify-content: flex-end;
+}
+
+.card .btn-edit {
+  background: #ffc107;
+}
+.card .btn-edit:hover {
+  background: #e0a800;
+}
+.card .btn-delete {
+  background: #dc3545;
+}
+.card .btn-delete:hover {
+  background: #c82333;
 }
 
 .mensagem-lista {
@@ -172,4 +228,169 @@ footer {
   margin-top: 30px;
   background: #333;
   color: #fff;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+  transition: opacity 0.3s ease;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #55aaff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 9999;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.toast {
+  background: #333;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  opacity: 1;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(0);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.hidden {
+  opacity: 0;
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+.toast.toast-success {
+  background: #28a745;
+}
+
+.toast.toast-error {
+  background: #dc3545;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9990;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.hidden .modal-box {
+  transform: scale(0.9);
+}
+
+.modal-box h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.modal-box p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.modal-botoes {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.modal-btn-cancelar {
+  background: #aaa;
+  color: #fff;
+}
+.modal-btn-cancelar:hover {
+  background: #888;
+}
+
+.modal-btn-confirmar {
+  background: #dc3545;
+  color: #fff;
+}
+.modal-btn-confirmar:hover {
+  background: #c82333;
 }

@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <div id="loading-overlay" class="loading-overlay hidden">
+      <div class="spinner"></div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <div id="confirm-modal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <h3>Atenção!</h3>
+        <p id="confirm-message">Tem certeza que deseja fazer isso?</p>
+        <div class="modal-botoes">
+          <button id="modal-btn-cancelar" class="modal-btn modal-btn-cancelar">
+            Cancelar
+          </button>
+          <button id="modal-btn-confirmar" class="modal-btn modal-btn-confirmar">
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+
     <header>
       <div class="container">
         <img src="assets/logo.png" id="logo" alt="Logo Loja Bagunçada" />

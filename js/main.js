@@ -3,32 +3,113 @@
  * Verifica em qual página estamos e inicializa os componentes corretos.
  */
 document.addEventListener("DOMContentLoaded", () => {
+  const loadingOverlay = document.getElementById("loading-overlay");
+
+  function showLoader() {
+    if (loadingOverlay) {
+      loadingOverlay.classList.remove("hidden");
+    }
+  }
+
+  function hideLoader() {
+    if (loadingOverlay) {
+      loadingOverlay.classList.add("hidden");
+    }
+  }
+
+  const toastContainer = document.getElementById("toast-container");
+
+  /**
+   * Exibe uma notificação toast.
+   * @param {string} message - A mensagem a ser exibida.
+   * @param {string} type - 'success' (verde) ou 'error' (vermelho).
+   * @param {number} duration - Duração em milissegundos.
+   */
+  function showToast(message, type = "success", duration = 3000) {
+    if (!toastContainer) return;
+
+    const toast = document.createElement("div");
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("hidden");
+    }, duration);
+
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.parentElement.removeChild(toast);
+      }
+    }, duration + 500);
+  }
+
+  const confirmModal = document.getElementById("confirm-modal");
+  const confirmMessage = document.getElementById("confirm-message");
+  const btnModalConfirmar = document.getElementById("modal-btn-confirmar");
+  const btnModalCancelar = document.getElementById("modal-btn-cancelar");
+
+  /**
+   * Exibe um modal de confirmação e retorna uma Promise.
+   * @param {string} message - A pergunta de confirmação.
+   * @returns {Promise<boolean>} - Resolve true se confirmado, false se cancelado.
+   */
+  function showConfirm(message) {
+    return new Promise((resolve) => {
+      if (!confirmModal || !confirmMessage || !btnModalConfirmar || !btnModalCancelar) {
+          resolve(false);
+          return;
+      }
+      
+      confirmMessage.textContent = message;
+      confirmModal.classList.remove("hidden");
+
+      const newBtnConfirmar = btnModalConfirmar.cloneNode(true);
+      btnModalConfirmar.parentNode.replaceChild(newBtnConfirmar, btnModalConfirmar);
+      
+      const newBtnCancelar = btnModalCancelar.cloneNode(true);
+      btnModalCancelar.parentNode.replaceChild(newBtnCancelar, btnModalCancelar);
+
+      const btnConfirmar = document.getElementById("modal-btn-confirmar");
+      const btnCancelar = document.getElementById("modal-btn-cancelar");
+
+      btnConfirmar.onclick = () => {
+        confirmModal.classList.add("hidden");
+        resolve(true);
+      };
+
+      btnCancelar.onclick = () => {
+        confirmModal.classList.add("hidden");
+        resolve(false);
+      };
+    });
+  }
+
   // Se o elemento 'lista-produtos' existir, estamos na 'index.html'
   if (document.getElementById("lista-produtos")) {
-    initIndexPage();
+    initIndexPage(showLoader, hideLoader, showToast, showConfirm);
   }
 
   // Se o elemento 'form-contato' existir, estamos na 'contato.html'
   if (document.getElementById("form-contato")) {
-    initContatoPage();
+    initContatoPage(showLoader, hideLoader, showToast);
   }
 });
 
 /**
  * Funções da Página de Produtos (index.html)
  */
-function initIndexPage() {
-  // URL da nossa API (json-server)
+function initIndexPage(showLoader, hideLoader, showToast, showConfirm) {
   const API_URL = "http://localhost:3000/produtos";
 
-  // Seleciona os elementos do DOM
   const lista = document.getElementById("lista-produtos");
   const form = document.getElementById("form-produto");
   const idField = document.getElementById("produto-id");
   const btnCancelar = document.getElementById("btn-cancelar");
 
   // Carrega os produtos ao iniciar
-  carregarProdutos();
+  carregarProdutos(true);
 
   // Adiciona o listener ao formulário para salvar (Criar ou Atualizar)
   form.addEventListener("submit", async (e) => {
@@ -40,18 +121,29 @@ function initIndexPage() {
 
     const produto = { nome, preco: parseFloat(preco) || 0 };
 
-    try {
-      if (id) {
-        await salvarProduto(produto, id);
-      } else {
-        await salvarProduto(produto);
-      }
+    showLoader();
 
+    let toastMessage = "";
+    let toastType = "success";
+
+    try {
+      await salvarProduto(produto, id);
+      
+      toastMessage = id ? "Produto atualizado!" : "Produto salvo!";
+      toastType = "success";
+      
       form.reset();
-      await carregarProdutos();
+      await carregarProdutos(false);
+
     } catch (error) {
       console.error("Erro ao salvar produto:", error.message);
-      alert(`Erro ao salvar produto: ${error.message}`);
+      toastMessage = `Erro ao salvar produto: ${error.message}`;
+      toastType = "error";
+    } finally {
+      hideLoader();
+      if (toastMessage) {
+        showToast(toastMessage, toastType);
+      }
     }
   });
 
@@ -69,7 +161,8 @@ function initIndexPage() {
   /**
    * (GET) Carrega todos os produtos da API e os renderiza na tela
    */
-  async function carregarProdutos() {
+  async function carregarProdutos(isInitialLoad = false) {
+    if (isInitialLoad) showLoader();
     try {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error("Erro ao buscar produtos");
@@ -87,13 +180,13 @@ function initIndexPage() {
       console.error("Falha ao carregar produtos:", error);
       lista.innerHTML =
         '<p class="mensagem-lista erro">Erro ao carregar produtos.</p>';
+    } finally {
+      if (isInitialLoad) hideLoader();
     }
   }
 
   /**
-   * (POST / PATCH) Envia o produto para a API
-   * @param {object} produto - O objeto do produto {nome, preco}
-   * @param {string|null} id - O ID do produto (para edição)
+   * (POST / PATCH) Apenas envia o produto para a API e lança erro se falhar.
    */
   async function salvarProduto(produto, id = null) {
     const url = id ? `${API_URL}/${id}` : API_URL;
@@ -111,18 +204,23 @@ function initIndexPage() {
         `[${response.status}] ${errorText || "Erro no servidor"}`
       );
     }
-
-    alert(id ? "Produto atualizado!" : "Produto salvo!");
   }
 
   /**
    * (DELETE) Exclui um produto da API
-   * @param {string} id - O ID do produto a ser excluído
    */
   async function excluirProduto(id) {
-    if (!confirm("Tem certeza que deseja excluir este produto?")) {
+    const confirmado = await showConfirm(
+      "Tem certeza que deseja excluir este produto?"
+    );
+    if (!confirmado) {
       return;
     }
+
+    showLoader();
+
+    let toastMessage = "";
+    let toastType = "success";
 
     try {
       const response = await fetch(`${API_URL}/${id}`, {
@@ -134,17 +232,26 @@ function initIndexPage() {
           `[${response.status}] ${errorText || "Erro no servidor"}`
         );
       }
-      alert("Produto excluído!");
-      await carregarProdutos();
+      
+      toastMessage = "Produto excluído!";
+      toastType = "success";
+
+      await carregarProdutos(false);
+
     } catch (error) {
       console.error("Falha ao excluir:", error);
-      alert(`Erro ao excluir produto: ${error.message}`);
+      toastMessage = `Erro ao excluir produto: ${error.message}`;
+      toastType = "error";
+    } finally {
+      hideLoader();
+      if (toastMessage) {
+        showToast(toastMessage, toastType);
+      }
     }
   }
 
   /**
    * Preenche o formulário para edição
-   * @param {object} produto - O objeto do produto a ser editado
    */
   function prepararEdicao(produto) {
     idField.value = produto.id;
@@ -158,7 +265,6 @@ function initIndexPage() {
 
   /**
    * Cria o HTML para um card de produto e o adiciona na lista
-   * @param {object} produto - O objeto do produto
    */
   function renderProdutoCard(produto) {
     const card = document.createElement("div");
@@ -172,13 +278,13 @@ function initIndexPage() {
     });
 
     card.innerHTML = `
-            <span class="title">${produto.nome}</span>
-            <span class="price">${precoFormatado}</span>
-            <div class="botoes">
-                <button class="btn-edit">Editar</button>
-                <button class="btn-delete">Excluir</button>
-            </div>
-        `;
+      <span class="title">${produto.nome}</span>
+      <span class="price">${precoFormatado}</span>
+      <div class="botoes">
+        <button class="btn-edit">Editar</button>
+        <button class="btn-delete">Excluir</button>
+      </div>
+    `;
 
     card
       .querySelector(".btn-edit")
@@ -194,7 +300,7 @@ function initIndexPage() {
 /**
  * Funções da Página de Contato (contato.html)
  */
-function initContatoPage() {
+function initContatoPage(showLoader, hideLoader, showToast) {
   const API_URL = "http://localhost:3000/contatos";
   const form = document.getElementById("form-contato");
 
@@ -203,7 +309,7 @@ function initContatoPage() {
 
     const email = form.email.value;
     if (email.indexOf("@") === -1) {
-      alert("Email inválido");
+      showToast("Email inválido", "error");
       return;
     }
 
@@ -213,6 +319,11 @@ function initContatoPage() {
       mensagem: form.mensagem.value,
       data: new Date().toISOString(),
     };
+
+    showLoader();
+
+    let toastMessage = "";
+    let toastType = "success";
 
     try {
       const response = await fetch(API_URL, {
@@ -227,11 +338,19 @@ function initContatoPage() {
         );
       }
 
-      alert("Mensagem enviada com sucesso!");
+      toastMessage = "Mensagem enviada com sucesso!";
+      toastType = "success";
       form.reset();
+
     } catch (error) {
       console.error("Falha ao enviar contato:", error);
-      alert(`Erro ao enviar mensagem: ${error.message}`);
+      toastMessage = `Erro ao enviar mensagem: ${error.message}`;
+      toastType = "error";
+    } finally {
+      hideLoader();
+      if (toastMessage) {
+        showToast(toastMessage, toastType);
+      }
     }
   });
 }
