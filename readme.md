@@ -50,6 +50,9 @@ O projeto foi desenvolvido com foco em uma **interface moderna e intuitiva**, ut
 ```bash
 git clone https://github.com/Felipe-Vieira15/projetoBaguncado.git
 cd projetoBaguncado
+
+# instale as dependências
+npm install
 ```
 ### 2️⃣ Execute o Back-End (API Mock)
 
