@@ -51,22 +51,21 @@ O projeto foi desenvolvido com foco em uma **interface moderna e intuitiva**, ut
 git clone https://github.com/Felipe-Vieira15/projetoBaguncado.git
 cd projetoBaguncado
 ```
-
-2. Execute o Back-End (API Mock)
+### 2️⃣ Execute o Back-End (API Mock)
 
 O projeto precisa que o json-server esteja rodando para fornecer os dados dos produtos e salvar os contatos. Na pasta do projeto, execute o seguinte comando no seu terminal:
 
-Bash
-
+```bash
 npx json-server --watch db.json
-O terminal deverá exibir que o servidor está rodando em http://localhost:3000. Deixe este terminal aberto.
+```
 
-3. Execute o Front-End (Aplicação)
+> O terminal deverá exibir que o servidor está rodando em `http://localhost:3000.` Deixe este terminal aberto.
+
+### 3️⃣ Execute o Front-End (Aplicação)
 
 Como este projeto é feito com HTML, CSS e JS puros, você não precisa de um servidor web. Basta abrir o arquivo index.html diretamente no seu navegador.
 
-Bash
-
+```bash
 # (No Windows)
 start index.html
 
@@ -75,10 +74,15 @@ open index.html
 
 # (No Linux)
 xdg-open index.html
-Nota: Você também pode usar uma extensão como o "Live Server" no VS Code, mas abrir o arquivo diretamente funciona perfeitamente, pois a API (localhost:3000) e o arquivo (file://...) rodam na mesma máquina.
+```
 
-📁 Estrutura de Pastas
-O projeto está organizado da seguinte forma:
+> Nota: Você também pode usar uma extensão como o `"Live Server"` no VS Code, mas abrir o arquivo diretamente funciona perfeitamente, pois a API `(localhost:3000)` e o arquivo (file://...) rodam na mesma máquina.
+
+---
+
+## 📁 Estrutura de Pastas
+
+### O projeto está organizado da seguinte forma:
 
 ```
 projetoBaguncado/
@@ -100,5 +104,7 @@ projetoBaguncado/
 └── README.md                # Este arquivo
 ```
 
-📜 Licença
+---
+
+### 📜 Licença
 Este projeto está sob a licença ISC.
